@@ -1,0 +1,37 @@
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo
+    container_name: mongodba
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  # mongo-express:
+  #   image: mongo-express
+  #   restart: always
+  #   ports:
+  #     - 8081:8081
+  #   environment:
+  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
+  #     ME_CONFIG_MONGODB_ADMINPASSWORD: example
+
+  strapi-app:
+    image: strapi/strapi
+    restart: always
+    volumes: 
+      - ./strapi-app:/usr/src/api/strapi-app
+    environment:
+      DATABASE_CLIENT: mongo
+      DATABASE_HOST: mongodba
+      DATABASE_PORT: 27017
+      DATABASE_NAME: admin
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: example
+    ports:
+      - "1337:1337"
